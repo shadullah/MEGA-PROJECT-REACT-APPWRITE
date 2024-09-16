@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import service from "../../../appwrite/config";
 import PostCard from "../Posts/PostCard";
 import Container from "../../container/Container";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading]= useState(true)
+  const [loading, setLoading] = useState(true);
+
+  const authStatus = useSelector((state) => state.auth.status);
 
   useEffect(() => {
     service
@@ -19,27 +22,36 @@ const Home = () => {
       .catch((err) => {
         console.log(err);
       })
-      .finally(()=>{
-        setLoading(false)
-      })
-
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  if(loading){
-    return <div>Loading....</div>
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading....
+      </div>
+    );
   }
 
   if (posts.length === 0) {
     return (
       <div className="w-full py-8 mt-4 text-center">
         <Container>
-          <div className="flex flex-wrap">
-            <div className="p-2 w-full">
-              <h1 className="text-2xl font-bold hover:text-gray-500">
-                Login to read posts
-              </h1>
-            </div>
-          </div>
+          {authStatus ? (
+            <p className="text-4xl my-32">Add post and get going</p>
+          ) : (
+            <>
+              <div className="flex flex-wrap">
+                <div className="p-2 w-full">
+                  <h1 className="text-2xl font-bold hover:text-gray-500">
+                    Login to read posts
+                  </h1>
+                </div>
+              </div>
+            </>
+          )}
         </Container>
       </div>
     );

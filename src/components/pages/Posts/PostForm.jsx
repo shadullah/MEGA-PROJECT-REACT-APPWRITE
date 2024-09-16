@@ -20,21 +20,26 @@ const PostForm = ({ post }) => {
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state?.user?.userData);
+  console.log(userData);
 
   const submit = async (data) => {
     if (post) {
-      const file = data.image[0] ? service.uploadFile(data.image[0]) : null;
+      const file = data.image[0]
+        ? await service.uploadFile(data.image[0])
+        : null;
 
       if (file) {
-        service.deleteFile(post.image);
+        await service.deleteFile(post.image);
       }
-      const dbPost = await service.updatePost(post.$id, {
-        ...data,
-        image: file ? file.$id : undefined,
-      });
-      if (dbPost) {
-        navigate(`/post/${dbPost.$id}`);
+      if (post.$id) {
+        const dbPost = await service.updatePost(post.$id, {
+          ...data,
+          image: file ? file.$id : undefined,
+        });
+        if (dbPost) {
+          navigate(`/post/${dbPost.$id}`);
+        }
       }
     } else {
       const file = await service.uploadFile(data.image[0]);

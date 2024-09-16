@@ -5,19 +5,25 @@ import { Link, useNavigate } from "react-router-dom";
 import authService from "../../../appwrite/auth";
 import { login } from "../../../store/authSlice";
 import Button from "../../shared/Button/Button";
-import { Input } from "postcss";
+// import { Input } from "postcss";
 import Logo from "../../shared/Logo/Logo";
+import Input from "../../shared/Input/Input";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [error, setError] = useState("");
 
   const create = async (data) => {
     setError("");
     try {
       const userDataCreation = await authService.createAccount(data);
+      console.log(userDataCreation);
       if (userDataCreation) {
         const userData = await authService.getCurrentUser();
         if (userData) dispatch(login(userData));
@@ -62,6 +68,7 @@ const SignUp = () => {
                   required: true,
                 })}
               />
+              {errors.name && <p>{errors.name.message}</p>}
               <Input
                 label="Email: "
                 placeholder="Enter your email"
@@ -76,6 +83,8 @@ const SignUp = () => {
                   },
                 })}
               />
+              {errors.email && <p>{errors.email.message}</p>}
+
               <Input
                 label="Password: "
                 type="password"
@@ -84,6 +93,8 @@ const SignUp = () => {
                   required: true,
                 })}
               />
+              {errors.password && <p>{errors.password.message}</p>}
+
               <Button type="submit" className="w-full">
                 Create Account
               </Button>

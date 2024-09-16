@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+// import { useState } from "react";
 import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
@@ -30,13 +30,8 @@ function App() {
   //       <Navbar />
   //       <main>
   //         {/* todo: <Outlet/> */}
-  //         {!loading ? (
-  //           <Outlet />
-  //         ) : (
-  //           <>
-  //             <p>Not working outlet</p>
-  //           </>
-  //         )}
+  //         {!loading ? <Outlet /> : null}
+  //         <Outlet />
   //       </main>
   //       <Footer />
   //     </div>
@@ -47,8 +42,8 @@ function App() {
     <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
       <div className="w-full block">
         <Navbar />
-        <main>
-          TODO: <Outlet />
+        <main className="">
+          <Outlet />
         </main>
         <Footer />
       </div>

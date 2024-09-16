@@ -7,14 +7,17 @@ const PostCard = ({ $id, title, image }) => {
 
   useEffect(() => {
     const fetchImg = async () => {
-      const fileUrl = await service.getFile(image);
-      setImageUrl(fileUrl);
+      if (image) {
+        try {
+          const fileUrl = await service.getFile(image);
+          setImageUrl(fileUrl);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     };
     fetchImg();
   }, [image]);
-  {
-    console.log(service.getFile(image));
-  }
   return (
     <div>
       <Link to={`/post/${$id}`}>

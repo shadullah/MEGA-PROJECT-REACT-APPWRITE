@@ -20,10 +20,12 @@ const PostForm = ({ post }) => {
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state?.user?.userData);
-  console.log(userData);
+  const userData = useSelector((state) => state?.auth?.userData);
+  // console.log(userData);
 
   const submit = async (data) => {
+    console.log(data.image);
+
     if (post) {
       const file = data.image[0]
         ? await service.uploadFile(data.image[0])
@@ -63,8 +65,9 @@ const PostForm = ({ post }) => {
       return value
         .trim()
         .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]+/g, "-")
-        .replace(/\s/g, "-");
+        .replace(/[^a-zA-Z\d\s]+/g, "-")
+        .replace(/\s/g, "-")
+        .slice(0, 35);
     }
     return "";
   }, []);
@@ -72,7 +75,8 @@ const PostForm = ({ post }) => {
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug"), slugTransform(value);
+        const transformedSlug = slugTransform(value.title);
+        setValue("slug", transformedSlug);
       }
     });
 
@@ -80,6 +84,10 @@ const PostForm = ({ post }) => {
       subscription.unsubscribe();
     };
   }, [watch, slugTransform, setValue]);
+
+  {
+    console.log(service.getFile(post.image));
+  }
 
   return (
     <div>
@@ -92,12 +100,14 @@ const PostForm = ({ post }) => {
             {...register("title", { required: true })}
           />
           <Input
+            type="text"
             label="Slug :"
             placeholder="Slug"
             className="mb-4"
             {...register("slug", { required: true })}
             onInput={(e) => {
-              setValue("slug", slugTransform(e.currentTarget.value), {
+              const transformedSlug = slugTransform(e.currentTarget.value);
+              setValue("slug", transformedSlug, {
                 shouldValidate: true,
               });
             }}
@@ -120,7 +130,7 @@ const PostForm = ({ post }) => {
           {post && (
             <div className="w-full mb-4">
               <img
-                src={service.getFilePreview(post.featuredImage)}
+                src={service.getFile(post?.image)}
                 alt={post.title}
                 className="rounded-lg"
               />
@@ -128,7 +138,7 @@ const PostForm = ({ post }) => {
           )}
           <Select
             options={["active", "inactive"]}
-            label="Status"
+            label="Status "
             className="mb-4"
             {...register("status", { required: true })}
           />

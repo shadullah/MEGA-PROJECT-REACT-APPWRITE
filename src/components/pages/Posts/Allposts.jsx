@@ -7,20 +7,23 @@ import Container from "../../container/Container";
 const Allposts = () => {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {}, []);
-
-  service.getPosts([]).then((posts) => {
-    if (posts) {
-      setPosts(posts.documents);
-    }
-  });
+  useEffect(() => {
+    const fetchPosts = async () => {
+      await service.getPosts([]).then((posts) => {
+        if (posts) {
+          setPosts(posts.documents);
+        }
+      });
+    };
+    fetchPosts();
+  }, []);
 
   return (
     <div>
       <div className="w-full py-8">
         <Container>
           <div className="flex flex-wrap">
-            {posts.map((post) => (
+            {posts?.map((post) => (
               <div key={post.$id} className="p-2 w-1/4">
                 <PostCard {...post} />
               </div>

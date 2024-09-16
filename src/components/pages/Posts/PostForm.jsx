@@ -13,7 +13,7 @@ const PostForm = ({ post }) => {
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
       },
@@ -86,7 +86,7 @@ const PostForm = ({ post }) => {
   }, [watch, slugTransform, setValue]);
 
   {
-    console.log(service.getFile(post.image));
+    console.log(service.getFile(post?.image));
   }
 
   return (

@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import service from "../../../appwrite/config";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../../shared/Button/Button";
 import Select from "../../shared/Select/Select";
 import Input from "../../shared/Input/Input";
@@ -85,9 +85,15 @@ const PostForm = ({ post }) => {
     };
   }, [watch, slugTransform, setValue]);
 
-  {
-    console.log(service.getFile(post?.image));
-  }
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    const fetchImg = async () => {
+      const fileUrl = await service.getFile(post?.image);
+      setImageUrl(fileUrl);
+    };
+    fetchImg();
+  }, [post]);
 
   return (
     <div>
@@ -129,11 +135,7 @@ const PostForm = ({ post }) => {
           />
           {post && (
             <div className="w-full mb-4">
-              <img
-                src={service.getFile(post?.image)}
-                alt={post.title}
-                className="rounded-lg"
-              />
+              <img src={imageUrl} alt={post.title} className="rounded-lg" />
             </div>
           )}
           <Select

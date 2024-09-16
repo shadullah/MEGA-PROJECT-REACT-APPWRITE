@@ -35,15 +35,21 @@ export default function Post() {
     });
   };
 
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    const fetchImg = async () => {
+      const fileUrl = await service.getFile(post?.image);
+      setImageUrl(fileUrl);
+    };
+    fetchImg();
+  }, [post]);
+
   return post ? (
     <div className="py-8">
       <Container>
         <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-          <img
-            src={service.getFile(post?.image)}
-            alt={post.title}
-            className="rounded-xl"
-          />
+          <img src={imageUrl} alt={post.title} className="rounded-xl" />
 
           {isAuthor && (
             <div className="absolute right-6 top-6">

@@ -1,18 +1,33 @@
 import { useEffect, useState } from "react";
 import service from "../../../appwrite/config";
-import { Container } from "postcss";
 import PostCard from "../Posts/PostCard";
+import Container from "../../container/Container";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading]= useState(true)
 
   useEffect(() => {
-    service.getPosts().then((posts) => {
-      if (posts) {
-        setPosts(posts.documents);
-      }
-    });
+    service
+      .getPosts()
+      .then((posts) => {
+        console.log(posts);
+        if (posts && posts.documents) {
+          setPosts(posts.documents);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
+
   }, []);
+
+  if(loading){
+    return <div>Loading....</div>
+  }
 
   if (posts.length === 0) {
     return (

@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import Navbar from "./components/shared/Navbar/Navbar";
-// import { Outlet } from "react-router-dom";
 import Footer from "./components/shared/footer/footer";
 import { Outlet } from "react-router-dom";
 
@@ -25,14 +24,34 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
+  // return (
+  //   <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
+  //     <div className="w-full block">
+  //       <Navbar />
+  //       <main>
+  //         {/* todo: <Outlet/> */}
+  //         {!loading ? (
+  //           <Outlet />
+  //         ) : (
+  //           <>
+  //             <p>Not working outlet</p>
+  //           </>
+  //         )}
+  //       </main>
+  //       <Footer />
+  //     </div>
+  //   </div>
+  // );
+
   return !loading ? (
-    <div>
-      <Navbar />
-      <main>
-        {/* todo: <Outlet/> */}
-        <Outlet />
-      </main>
-      <Footer />
+    <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
+      <div className="w-full block">
+        <Navbar />
+        <main>
+          TODO: <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   ) : null;
 }
